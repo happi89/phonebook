@@ -1,12 +1,13 @@
 const Persons = ({ persons }) => {
 	return (
-		<div>
+		<ul>
 			{persons.map((person) => (
-				<p>
-					{person.name} {person.number}
-				</p>
+				<li key={person.id}>
+					{person.name}
+					{person.number}
+				</li>
 			))}
-		</div>
+		</ul>
 	);
 };
 
