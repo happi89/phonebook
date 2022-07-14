@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import axios from 'axios';
+import services from './services/phone';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -9,9 +9,9 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState('');
 
 	useEffect(() => {
-		axios
-			.get('http://localhost:3001/persons')
-			.then((response) => setPersons(response.data));
+		services.getAll().then((response) => {
+			setPersons(response.data);
+		});
 	}, []);
 
 	const handleNameChange = (event) => {
@@ -27,7 +27,7 @@ const App = () => {
 
 		const names = persons.map((person) => person.name);
 		if (names.includes(newName)) {
-			alert(`${newName} has already been added`);
+			alert(`${newName} has already been added to the phonebook.`);
 		} else {
 			addPerson();
 		}
@@ -38,11 +38,22 @@ const App = () => {
 			name: newName,
 			number: newNumber,
 			date: new Date().toISOString,
-			id: persons.length + 1,
+			id: Math.random * 10000,
 		};
-		setPersons(persons.concat(phoneObject));
-		setNewName(' ');
-		setNewNumber(' ');
+
+		services.create(phoneObject).then((response) => {
+			setPersons(persons.concat(response.data));
+			setNewName('');
+			setNewNumber('');
+		});
+	};
+
+	const deletePerson = (id) => {
+		console.log('delete');
+		if (window.confirm('Do you want to delete this persons?')) {
+			services.deletePerson(id);
+			window.location.reload();
+		}
 	};
 
 	return (
@@ -56,7 +67,7 @@ const App = () => {
 				newNumber={newNumber}
 			/>
 			<h2>Numbers</h2>
-			<Persons persons={persons} />
+			<Persons persons={persons} deletePerson={deletePerson} />
 		</div>
 	);
 };
