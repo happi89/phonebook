@@ -2,11 +2,14 @@ import { useState, useEffect } from 'react';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import services from './services/phone';
+import Notification from './components/Notification';
+import './index.css';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
+	const [successMessage, setSuccessMessage] = useState(null);
 
 	useEffect(() => {
 		services.getAll().then((response) => {
@@ -45,12 +48,16 @@ const App = () => {
 			setPersons(persons.concat(response.data));
 			setNewName('');
 			setNewNumber('');
+			setSuccessMessage(`${phoneObject.name} has been added`);
+			setTimeout(() => {
+				setSuccessMessage(null);
+			}, 3000);
 		});
 	};
 
 	const deletePerson = (id) => {
-		console.log('delete');
-		if (window.confirm('Do you want to delete this persons?')) {
+		const person = persons.filter((person) => id === person.id);
+		if (window.confirm(`Do you want to delete this ${person[0].name}`)) {
 			services.deletePerson(id);
 			window.location.reload();
 		}
@@ -59,6 +66,8 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={successMessage} />
+			{/* <div className='success'>{successMessage}</div> */}
 			<PersonForm
 				handleSubmit={handleSubmit}
 				newName={newName}
@@ -66,7 +75,7 @@ const App = () => {
 				handleNumberChange={handleNumberChange}
 				newNumber={newNumber}
 			/>
-			<h2>Numbers</h2>
+			<h2>Contacts</h2>
 			<Persons persons={persons} deletePerson={deletePerson} />
 		</div>
 	);
