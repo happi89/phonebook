@@ -15,7 +15,7 @@ const App = () => {
 		services.getAll().then((response) => {
 			setPersons(response.data);
 		});
-	}, []);
+	}, [successMessage]);
 
 	const handleNameChange = (event) => {
 		setNewName(event.target.value);
@@ -40,12 +40,9 @@ const App = () => {
 		const phoneObject = {
 			name: newName,
 			number: newNumber,
-			date: new Date().toISOString,
-			id: Math.random * 10000,
 		};
 
 		services.create(phoneObject).then((response) => {
-			setPersons(persons.concat(response.data));
 			setNewName('');
 			setNewNumber('');
 			setSuccessMessage(`${phoneObject.name} has been added`);
@@ -59,15 +56,17 @@ const App = () => {
 		const person = persons.filter((person) => id === person.id);
 		if (window.confirm(`Do you want to delete this ${person[0].name}`)) {
 			services.deletePerson(id);
-			window.location.reload();
 		}
+		setSuccessMessage(`${person[0].name} has been deleted`);
+		setTimeout(() => {
+			setSuccessMessage(null);
+		}, 3000);
 	};
 
 	return (
 		<div>
 			<h2>Phonebook</h2>
 			<Notification message={successMessage} />
-			{/* <div className='success'>{successMessage}</div> */}
 			<PersonForm
 				handleSubmit={handleSubmit}
 				newName={newName}

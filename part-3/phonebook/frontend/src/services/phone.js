@@ -1,16 +1,16 @@
 import axios from 'axios';
-const dbURL = 'http://localhost:3001/persons';
+const baseURL = '/api/persons';
 
 const getAll = () => {
-	return axios.get(dbURL);
+	return axios.get(baseURL);
 };
 
 const create = (phoneObject) => {
-	return axios.post(dbURL, phoneObject);
+	return axios.post(baseURL, phoneObject);
 };
 
 const deletePerson = (id) => {
-	return axios.delete(`${dbURL}/${id}`);
+	return axios.delete(`${baseURL}/${id}`);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
