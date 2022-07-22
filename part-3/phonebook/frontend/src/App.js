@@ -25,12 +25,30 @@ const App = () => {
 		setNewNumber(event.target.value);
 	};
 
+	const updatePerson = (id) => {
+		const person = persons.filter((person) => id === person.id);
+		const newPerson = { ...person, name: newName, number: newNumber };
+
+		services.updatePerson(id, newPerson)
+			.then(returnedPerson => {
+				setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+			})
+			.catch(error =>{
+				setSuccessMessage(`${person.name} has already been removed from the server`)
+			})
+			setTimeout(() => {
+          setErrorMessage(null)
+        }, 3000)
+        setPersons(persons.filter(n => n.id !== id))
+		}
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
 		const names = persons.map((person) => person.name);
 		if (names.includes(newName)) {
-			alert(`${newName} has already been added to the phonebook.`);
+			updatePerson();
 		} else {
 			addPerson();
 		}

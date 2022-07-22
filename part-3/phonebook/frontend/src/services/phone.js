@@ -13,5 +13,11 @@ const deletePerson = (id) => {
 	return axios.delete(`${baseURL}/${id}`);
 };
 
+const updatePerson = async (id, newObject) => {
+	const request = axios.put(`${baseURL}/${id}`, newObject);
+	const res = await request;
+	return res.data;
+};
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, deletePerson };
+export default { getAll, create, deletePerson, updatePerson };
