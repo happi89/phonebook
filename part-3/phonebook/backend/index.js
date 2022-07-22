@@ -46,6 +46,20 @@ app.get('/api/persons/:id', async (req, res, next) => {
 		.catch((error) => next(error));
 });
 
+app.put('/api/persons/:id', (req, res, next) => {
+	const { name, number } = req.body;
+
+	Person.findByIdAndUpdate(
+		req.params.id,
+		{ name, number },
+		{ new: true, runValidators: true, context: 'query' }
+	)
+		.then((updatedPerson) => {
+			res.json(updatedPerson);
+		})
+		.catch((error) => next(error));
+});
+
 app.post('/api/persons', async (req, res, next) => {
 	const body = req.body;
 
