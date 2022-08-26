@@ -8,23 +8,30 @@ const PersonForm = ({
 	return (
 		<form onSubmit={handleSubmit}>
 			<div>
-				name:{' '}
+				<label className='label'>
+					<span className='label-text'>Name: </span>
+				</label>
 				<input
+					className='input input-bordered w-full  max-w-xs'
 					value={newName}
 					onChange={handleNameChange}
 					required
 					type='text'
 				/>
-				<br />
-				number:
+				<label className='label'>
+					<span className='label-text'>Number: </span>
+				</label>
 				<input
+					className='input input-bordered w-full  max-w-xs'
 					value={newNumber}
 					onChange={handleNumberChange}
 					type='number'
 					required
 				/>
 			</div>
-			<button type='submit'>add</button>
+			<button className='btn btn-primary btn-wide my-2' type='submit'>
+				add
+			</button>
 		</form>
 	);
 };

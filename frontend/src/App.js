@@ -3,7 +3,6 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import services from './services/phone';
 import Notification from './components/Notification';
-import './index.css';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -29,18 +28,22 @@ const App = () => {
 		const person = persons.filter((person) => id === person.id);
 		const newPerson = { ...person, name: newName, number: newNumber };
 
-		services.updatePerson(id, newPerson)
-			.then(returnedPerson => {
-				setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+		services
+			.updatePerson(id, newPerson)
+			.then((returnedPerson) => {
+				setPersons(
+					persons.map((person) => (person.id !== id ? person : returnedPerson))
+				);
 			})
-			.catch(error =>{
-				setSuccessMessage(`${person.name} has already been removed from the server`)
-			})
-			setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-        setPersons(persons.filter(n => n.id !== id))
-		}
+			.catch((error) => {
+				setSuccessMessage(
+					`${person.name} has already been removed from the server`
+				);
+			});
+		setTimeout(() => {
+			setSuccessMessage(null);
+		}, 3000);
+		setPersons(persons.filter((n) => n.id !== id));
 	};
 
 	const handleSubmit = (event) => {
@@ -59,7 +62,6 @@ const App = () => {
 			name: newName,
 			number: newNumber,
 		};
-
 		services.create(phoneObject).then((response) => {
 			setNewName('');
 			setNewNumber('');
@@ -82,8 +84,8 @@ const App = () => {
 	};
 
 	return (
-		<div>
-			<h2>Phonebook</h2>
+		<div className='flex flex-col items-center'>
+			<h2 className='font-bold text-3xl my-6'>Phonebook</h2>
 			<Notification message={successMessage} />
 			<PersonForm
 				handleSubmit={handleSubmit}
@@ -92,7 +94,7 @@ const App = () => {
 				handleNumberChange={handleNumberChange}
 				newNumber={newNumber}
 			/>
-			<h2>Contacts</h2>
+			<h2 className='font-bold text-xl mt-6'>Contacts</h2>
 			<Persons persons={persons} deletePerson={deletePerson} />
 		</div>
 	);
