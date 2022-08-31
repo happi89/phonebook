@@ -9,7 +9,7 @@ const app = express();
 //middleware
 // const errorHandler = require('./middleware/error');
 
-app.use(express.static('build'));
+app.use(express.static('./build'));
 app.use(express.json());
 app.use(morgan('tiny'));
 app.use(cors());
